@@ -55,7 +55,7 @@ void WorldSession::SendAuctionHello(ObjectGuid guid, Creature* unit)
 {
     if (GetPlayer()->GetLevel() < sWorld->getIntConfig(CONFIG_AUCTION_LEVEL_REQ))
     {
-        SendNotification(GetAcoreString(LANG_AUCTION_REQ), sWorld->getIntConfig(CONFIG_AUCTION_LEVEL_REQ));
+        ChatHandler(this).SendNotification(LANG_AUCTION_REQ, sWorld->getIntConfig(CONFIG_AUCTION_LEVEL_REQ));
         return;
     }
 
@@ -371,10 +371,6 @@ void WorldSession::HandleAuctionSellItem(WorldPacket& recvData)
                     item2->SetState(ITEM_CHANGED, _player);
                     _player->ItemRemovedQuestCheck(item2->GetEntry(), count[j]);
                     item2->SendUpdateToPlayer(_player);
-
-                    CharacterDatabaseTransaction trans = CharacterDatabase.BeginTransaction();
-                    item2->SaveToDB(trans);
-                    CharacterDatabase.CommitTransaction(trans);
                 }
             }
 

@@ -178,12 +178,15 @@ enum WorldBoolConfigs
     CONFIG_LEAVE_GROUP_ON_LOGOUT,
     CONFIG_QUEST_POI_ENABLED,
     CONFIG_VMAP_BLIZZLIKE_PVP_LOS,
+    CONFIG_VMAP_BLIZZLIKE_LOS_OPEN_WORLD,
     CONFIG_OBJECT_SPARKLES,
     CONFIG_LOW_LEVEL_REGEN_BOOST,
     CONFIG_OBJECT_QUEST_MARKERS,
     CONFIG_STRICT_NAMES_RESERVED,
     CONFIG_STRICT_NAMES_PROFANITY,
     CONFIG_ALLOWS_RANK_MOD_FOR_PET_HEALTH,
+    CONFIG_MUNCHING_BLIZZLIKE,
+    CONFIG_ENABLE_DAZE,
     BOOL_CONFIG_VALUE_COUNT
 };
 
@@ -460,6 +463,7 @@ enum Rates
     RATE_BUYVALUE_ITEM_ARTIFACT,
     RATE_BUYVALUE_ITEM_HEIRLOOM,
     RATE_DROP_MONEY,
+    RATE_REWARD_QUEST_MONEY,
     RATE_REWARD_BONUS_MONEY,
     RATE_XP_KILL,
     RATE_XP_BG_KILL_AV,
@@ -562,10 +566,6 @@ public:
     [[nodiscard]] virtual uint16 GetConfigMaxSkillValue() const = 0;
     virtual void SetInitialWorldSettings() = 0;
     virtual void LoadConfigSettings(bool reload = false) = 0;
-    virtual void SendWorldText(uint32 string_id, ...) = 0;
-    virtual void SendWorldTextOptional(uint32 string_id, uint32 flag, ...) = 0;
-    virtual void SendGlobalText(const char* text, WorldSession* self) = 0;
-    virtual void SendGMText(uint32 string_id, ...) = 0;
     virtual void SendGlobalMessage(WorldPacket const* packet, WorldSession* self = nullptr, TeamId teamId = TEAM_NEUTRAL) = 0;
     virtual void SendGlobalGMMessage(WorldPacket const* packet, WorldSession* self = nullptr, TeamId teamId = TEAM_NEUTRAL) = 0;
     virtual bool SendZoneMessage(uint32 zone, WorldPacket const* packet, WorldSession* self = nullptr, TeamId teamId = TEAM_NEUTRAL) = 0;
@@ -608,6 +608,7 @@ public:
     [[nodiscard]] virtual std::string const& GetRealmName() const = 0;
     virtual void SetRealmName(std::string name) = 0;
     virtual void RemoveOldCorpses() = 0;
+    virtual void DoForAllOnlinePlayers(std::function<void(Player*)> exec) = 0;
 };
 
 #endif //AZEROTHCORE_IWORLD_H

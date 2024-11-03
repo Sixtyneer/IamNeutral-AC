@@ -21,15 +21,12 @@
 #include "Common.h"
 #include "GridNotifiersImpl.h"
 #include "Language.h"
-#include "Log.h"
 #include "ObjectMgr.h"
 #include "Opcodes.h"
 #include "Player.h"
 #include "Realm.h"
 #include "ScriptMgr.h"
-#include "SpellMgr.h"
 #include "Tokenize.h"
-#include "UpdateMask.h"
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
@@ -43,6 +40,11 @@ Player* ChatHandler::GetPlayer() const
 char const* ChatHandler::GetAcoreString(uint32 entry) const
 {
     return m_session->GetAcoreString(entry);
+}
+
+std::string const* ChatHandler::GetModuleString(std::string module, uint32 id) const
+{
+    return m_session->GetModuleString(module, id);
 }
 
 bool ChatHandler::IsAvailable(uint32 securityLevel) const
@@ -430,7 +432,7 @@ Player* ChatHandler::getSelectedPlayerOrSelf() const
     return targetPlayer;
 }
 
-bool ChatHandler::HasSession()
+bool ChatHandler::HasSession() const
 {
     if (!m_session)
         return false;
@@ -965,6 +967,11 @@ LocaleConstant CliHandler::GetSessionDbcLocale() const
 int CliHandler::GetSessionDbLocaleIndex() const
 {
     return sObjectMgr->GetDBCLocaleIndex();
+}
+
+bool CliHandler::HasSession() const
+{
+    return true;
 }
 
 bool AddonChannelCommandHandler::ParseCommands(std::string_view str)
